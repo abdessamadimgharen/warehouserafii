@@ -51,38 +51,155 @@ def send_report(request):
                     """
 
             facture_html = f"""
+            <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="utf-8">
                 <title>Report #{report.id}</title>
+
                 <style>
-                    body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                    img {{ max-width: 400px; margin-top: 10px; }}
+                    body {{
+                        font-family: "Segoe UI", Arial, sans-serif;
+                        background-color: #f5f6fa;
+                        margin: 0;
+                        padding: 30px;
+                    }}
+
+                    .report-container {{
+                        max-width: 800px;
+                        margin: auto;
+                        background: #ffffff;
+                        padding: 30px;
+                        border-radius: 10px;
+                        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+                    }}
+
+                    .report-header {{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 2px solid #eee;
+                        padding-bottom: 15px;
+                        margin-bottom: 20px;
+                    }}
+
+                    .report-header h2 {{
+                        margin: 0;
+                        color: #2c3e50;
+                    }}
+
+                    .report-header span {{
+                        color: #888;
+                        font-size: 14px;
+                    }}
+
+                    .info p {{
+                        margin: 6px 0;
+                        color: #444;
+                    }}
+
+                    .info strong {{
+                        color: #000;
+                    }}
+
+                    hr {{
+                        border: none;
+                        border-top: 1px solid #eee;
+                        margin: 25px 0;
+                    }}
+
+                    .content {{
+                        color: #333;
+                        line-height: 1.6;
+                    }}
+
+                    .content h3 {{
+                        margin-top: 0;
+                        color: #2c3e50;
+                    }}
+
+                    .attachment {{
+                        margin-top: 20px;
+                    }}
+
+                    .attachment img {{
+                        max-width: 100%;
+                        border-radius: 6px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        margin-top: 10px;
+                    }}
+
+                    .print-btn {{
+                        margin-top: 25px;
+                        text-align: right;
+                    }}
+
+                    .print-btn button {{
+                        background-color: #198754;
+                        color: #fff;
+                        border: none;
+                        padding: 10px 18px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 14px;
+                    }}
+
+                    .print-btn button:hover {{
+                        background-color: #157347;
+                    }}
+
                     @media print {{
-                        #print-button {{ display: none; }}
+                        body {{
+                            background: none;
+                            padding: 0;
+                        }}
+
+                        .report-container {{
+                            box-shadow: none;
+                            border-radius: 0;
+                        }}
+
+                        .print-btn {{
+                            display: none;
+                        }}
                     }}
                 </style>
             </head>
+
             <body>
+                <div class="report-container">
 
-                <h2>Report #{report.id}</h2>
+                    <div class="report-header">
+                        <h2>Report</h2>
+                        <span>#{report.id}</span>
+                    </div>
 
-                <p><strong>Date:</strong> {report.created_at}</p>
-                <p><strong>Sender:</strong> {report.sender_name}</p>
-                <p><strong>Email To:</strong> {report.email_to}</p>
+                    <div class="info">
+                        <p><strong>Date:</strong> {report.created_at}</p>
+                        <p><strong>Sender:</strong> {report.sender_name}</p>
+                        <p><strong>Email To:</strong> {report.email_to}</p>
+                    </div>
 
-                <hr>
+                    <hr>
 
-                <h3>Report Content</h3>
-                <p>{report.content}</p>
+                    <div class="content">
+                        <h3>Report Content</h3>
+                        <p>{report.content}</p>
+                    </div>
 
-                {attachment_html}
+                    <div class="attachment">
+                        {attachment_html}
+                    </div>
 
-                <button id="print-button" onclick="window.print()">Print</button>
+                    <div class="print-btn">
+                        <button onclick="window.print()">🖨️ Print Report</button>
+                    </div>
 
+                </div>
             </body>
             </html>
             """
+
 
             with open(facture_file, 'w', encoding='utf-8') as f:
                 f.write(facture_html)

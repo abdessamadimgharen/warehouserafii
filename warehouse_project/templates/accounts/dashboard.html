@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (btn.classList.contains('edit-btn')) {
             if (btn.classList.contains('edit-btn')) {
-                    const oldTask = li.querySelector('label').textContent;
+                    const oldTask = li.querySelector('label').textContent.trim();
 
                     Swal.fire({
                         title: 'Edit task',
