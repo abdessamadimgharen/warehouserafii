@@ -16,7 +16,6 @@ def send_report(request):
         if form.is_valid():
             report = form.save()
 
-            # send email
             email = EmailMessage(
                 subject=f"Report from {report.sender_name}",
                 body=report.content,
@@ -24,30 +23,25 @@ def send_report(request):
                 to=[report.email_to],
             )
 
-            # Attach file if exists
             if report.attachment:
                 email.attach_file(report.attachment.path)
 
             email.send(fail_silently=False)
 
-            # geneate facture
             media_root = Path(settings.MEDIA_ROOT)
             facture_dir = media_root / 'factures'
             facture_dir.mkdir(parents=True, exist_ok=True)
 
             facture_file = facture_dir / f'report_{report.id}.html'
 
-            # Add attachment preview
             attachment_html = ""
             if report.attachment:
-                # if image display it
                 if str(report.attachment).lower().endswith((".jpg", ".jpeg", ".png", ".gif")):
                     attachment_html = f"""
                     <p><strong>Attachment:</strong></p>
                     <img src="{settings.MEDIA_URL}{report.attachment}" alt="Attachment">
                     """
                 else:
-                    # For PDF  files show a download link
                     attachment_html = f"""
                     <p><strong>Attachment:</strong> 
                         <a href="{settings.MEDIA_URL}{report.attachment}" target="_blank">

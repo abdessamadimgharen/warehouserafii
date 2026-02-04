@@ -165,20 +165,17 @@ from django.db.models import Prefetch, Q
 
 @login_required
 def demand_list(request):
-    # Start with all demands and prefetch items + product
     demands = Demand.objects.prefetch_related(
         Prefetch('items', queryset=DemandItem.objects.select_related('product'))
     ).all().order_by('-date', '-id')
 
-    # Get search parameters
     product_query = request.GET.get('product', '')
     date_query = request.GET.get('date', '')
 
-    # Filter by product name
     if product_query:
         demands = demands.filter(
             items__product__name__icontains=product_query
-        ).distinct()  # distinct to avoid duplicates if multiple products match
+        ).distinct() 
 
     # Filter by date
     if date_query:

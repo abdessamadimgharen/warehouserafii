@@ -34,7 +34,6 @@ def product_list(request):
     from django.shortcuts import get_object_or_404
     from stock.models import Product, StockMovement
 
-    #Handle stock changes 
     if request.method == 'POST':
         product_id = request.POST.get('product_id')
         entrance_qty = request.POST.get('entrance_qty')
@@ -62,7 +61,6 @@ def product_list(request):
         product.save()
         return redirect('product_list')
 
-    #  handle search and category filter 
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
 
@@ -74,7 +72,6 @@ def product_list(request):
     if category:
         products = products.filter(category__icontains=category)
 
-    # Get distinct categories for dropdown
     categories = Product.objects.values_list('category', flat=True).distinct()
 
     return render(request, 'products/product_list.html', {
@@ -111,18 +108,14 @@ from products.models import Product
 
 @login_required
 def suppliers_list(request):
-    # Get search query and supplier filter
     product_query = request.GET.get('product', '').strip()     
     supplier_query = request.GET.get('supplier', '').strip()
 
-    # Start with all products ordered by supplier and name
     products = Product.objects.all().order_by('supplier_name', 'name')
 
-    # Filter by product name 
     if product_query:
         products = products.filter(name__icontains=product_query)
 
-    # Filter by supplier name 
     if supplier_query:
         products = products.filter(supplier_name__icontains=supplier_query)
 

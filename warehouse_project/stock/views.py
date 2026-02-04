@@ -13,13 +13,11 @@ from datetime import datetime, date
 from django.http import HttpResponse
 import io
 from reportlab.pdfgen import canvas
-# create Stock Movement 
 @login_required
 def stock_create(request):
     form = StockMovementForm(request.POST or None)
     if form.is_valid():
         stock_movement = form.save()
-        # update ur product quantity automatically
         product = stock_movement.product
         if stock_movement.movement_type == 'ENTRANCE':
             product.quantity += stock_movement.quantity
@@ -30,7 +28,6 @@ def stock_create(request):
 
     return render(request, 'stock/stock_form.html', {'form': form})
 
-# List All Stock Movements 
 @login_required
 def stock_list(request):
     movements = StockMovement.objects.select_related('product').all().order_by('-date', '-id')
@@ -91,7 +88,6 @@ def daily_stock(request):
             total_entrances_all += entrances
             total_exits_all += exits
 
-    # Check if PDF export
     if 'export_pdf' in request.GET:
         buffer = io.BytesIO()
         p = canvas.Canvas(buffer)
