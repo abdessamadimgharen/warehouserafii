@@ -42,17 +42,19 @@ A Django-based warehouse management system for managing products, stock movement
 
 ## Installation & Setup
 
-1. Go to the project folder
+1. Go to the project root folder
 
-cd path/to/warehouse_project
+cd path/to/warehouserafii
 
 
 2. Create a virtual environment and activate it
 
 python -m venv env
+
 # Windows
 .\env\Scripts\activate
-# Linux/Mac
+
+# Linux / Mac
 source env/bin/activate
 
 
@@ -61,24 +63,30 @@ source env/bin/activate
 pip install -r requirements.txt
 
 
-4. Apply database migrations
+4. Go to the Django project folder (where manage.py is)
+
+cd warehouse_project
+
+
+5. Apply database migrations
 
 python manage.py migrate
 
 
-5. Create a superuser (admin account)
+6. Create a superuser (admin account)
 
 python manage.py createsuperuser
 
 
-6. Run the development server
+7. Run the development server
 
 python manage.py runserver
 
 
-7. Access the app
+8. Access the app
 
-Open your browser and go to: http://127.0.0.1:8000/
+Open your browser and go to:
+http://127.0.0.1:8000/
 
 
 ## Usage
