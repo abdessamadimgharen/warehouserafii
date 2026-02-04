@@ -45,10 +45,26 @@
 
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.getElementById("menuToggle");
+    const menuLinks = document.getElementById("menuLinks");
 
-    document.getElementById("menuToggle").onclick = function () {
-        document.getElementById("menuLinks").classList.toggle("show");
-    };
+    // Toggle menu when clicking the button
+    menuToggle.addEventListener("click", function (e) {
+        e.stopPropagation(); // prevent document click
+        menuLinks.classList.toggle("show");
+    });
+
+    // Prevent closing when clicking inside the menu
+    menuLinks.addEventListener("click", function (e) {
+        e.stopPropagation();
+    });
+
+    // Close menu when clicking anywhere else
+    document.addEventListener("click", function () {
+        menuLinks.classList.remove("show");
+    });
+});
 
 
 </script>
