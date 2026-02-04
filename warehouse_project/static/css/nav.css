@@ -1,0 +1,57 @@
+/* Floating menu */
+.fixme {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+}
+.collapse-menu {
+
+    position: absolute;
+    top: 100%;   
+    left: 0;
+    width: 280px;
+    z-index: 1050;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    padding: 8px 0;
+}
+.navbar {
+        color:#0d121b; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background-color: #fff;
+}
+/* Visible state */
+.collapse-menu.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Links inside menu */
+.menu-link {
+    padding: 8px 16px;
+    color: #374151;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.menu-link:hover {
+    background-color: #f1f3f5;
+    color: #0d6efd;
+    border-radius: 6px;
+}
+
+/* Responsive: mobile full width */
+@media (max-width: 576px) {
+    .collapse-menu {
+        width: calc(100vw - 20px);
+        left: 10px;
+    }
+}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Add Stock Movement{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-body">
+                    <h2 class="card-title mb-4 text-center">Add Stock Movement</h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="id_product" class="form-label fw-semibold">Product</label>
+                            <select name="product" class="form-control" id="id_product">
+                                {% for choice in form.product.field.choices %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form.product.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.product.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_quantity" class="form-label fw-semibold">Quantity</label>
+                            <input type="number" name="quantity" class="form-control" id="id_quantity"
+                                   value="{{ form.quantity.value|default_if_none:'' }}">
+                            {% if form.quantity.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.quantity.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_date" class="form-label fw-semibold">Date</label>
+                            <input type="date" name="date" class="form-control" id="id_date"
+                                   value="{{ form.date.value|default_if_none:'' }}">
+                            {% if form.date.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ form.date.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2">Save</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Daily Stock Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-semibold">Daily Stock Report</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-3">
+            ⬅ Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card shadow-sm rounded-3 p-3 mb-4" style="background-color: #fff;">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="date" class="form-label">Select Date</label>
+                <input type="date" id="date" name="date" class="form-control" value="{{ selected_date }}">
+            </div>
+            <div class="col-md-8 d-flex gap-2">
+                <button type="submit" class="btn btn-dark w-50 rounded-3">Filter</button>
+                <button type="submit" name="export_pdf" value="1" class="btn btn-outline-secondary w-50 rounded-3">Export PDF</button>
+            </div>
+        </form>
+    </div>
+
+    {% if daily_data %}
+    <div class="table-responsive mb-4">
+        <table class="table table-hover table-bordered align-middle text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Total Entrances</th>
+                    <th>Total Exits</th>
+                    <th>Final Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in daily_data %}
+                <tr>
+                    <td>{{ data.product.name }}</td>
+                    <td>{{ data.total_entrances }}</td>
+                    <td>{{ data.total_exits }}</td>
+                    <td>{{ data.final_stock }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="fw-bold table-secondary">
+                    <td>TOTALS</td>
+                    <td>{{ total_entrances_all }}</td>
+                    <td>{{ total_exits_all }}</td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card shadow-sm rounded-3 p-3 mb-4">
+        <h5 class="card-title text-center mb-3">Daily Stock Chart</h5>
+        <canvas id="dailyChart" style="height:400px;"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    const ctx = document.getElementById('dailyChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for d in daily_data %}'{{ d.product.name }}',{% endfor %}],
+            datasets: [
+                {
+                    label: 'Entrances',
+                    data: [{% for d in daily_data %}{{ d.total_entrances }},{% endfor %}],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                },
+                {
+                    label: 'Exits',
+                    data: [{% for d in daily_data %}{{ d.total_exits }},{% endfor %}],
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+    </script>
+
+    {% else %}
+    <div class="alert alert-warning text-center">
+        <strong>No stock movements for this date.</strong>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Delete Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="background-color: #eee; padding: 25px; border-radius: 10px; max-width: 600px;">
+
+    <h2 class="fw-semibold text-danger mb-3">Confirm Delete</h2>
+    <p>Are you sure you want to delete this report?</p>
+
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>Sender:</strong> {{ report.sender_name }}</li>
+        <li class="list-group-item"><strong>Email:</strong> {{ report.email_to }}</li>
+        <li class="list-group-item"><strong>Date:</strong> {{ report.created_at|date:"Y-m-d H:i" }}</li>
+        <li class="list-group-item"><strong>Text:</strong> {{ report.content }}</li>
+    </ul>
+
+    <form method="post" class="d-flex gap-2">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger rounded-3">
+            Yes, Delete
+        </button>
+        <a href="{% url 'report_list' %}" class="btn btn-outline-secondary rounded-3">
+            Cancel
+        </a>
+    </form>
+
+</div>
+{% endblock %}

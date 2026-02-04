@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/repadd.css' %}">
+
+{% endblock %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="container-fluid d-flex justify-content-center align-items-center bg-light"
+     style="min-height: 100vh">
+
+    <div class="col-md-6 col-lg-4">
+        <form class="bg-white p-4 rounded-4 shadow" method="post">
+
+            <h2 class="text-center mb-4 fw-semibold">Admin Login</h2>
+
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-group">
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        class="form-control" 
+                        required
+                    >
+                    <span 
+                        class="input-group-text bg-white"
+                        style="cursor:pointer;"
+                        onmousedown="password.type='text'" 
+                        onmouseup="password.type='password'"
+                        onmouseleave="password.type='password'"
+                    >
+                        <i class="bi bi-eye"></i>
+                    </span>
+                </div>
+                <a href="{% url 'password_reset' %}" class="text-decoration-none" style="font-size:14px;">
+                    Forgot password?
+                </a>
+            </div>
+            <!-- Button -->
+            <button type="submit" class="btn btn-dark w-100 rounded-3">
+                Login
+            </button>
+
+            {% if error %}
+                <p class="text-danger text-center mt-3">{{ error }}</p>
+            {% endif %}
+
+        </form>
+    </div>
+
+</div>
+{% block footer %}{% endblock %}
+{% endblock %}

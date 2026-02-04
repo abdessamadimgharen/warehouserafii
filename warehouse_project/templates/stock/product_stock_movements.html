@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Stock movements for {{ product.name }}</h2>
+
+<p><strong>Final Stock:</strong> {{ final_stock }}</p>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Quantity</th>
+    </tr>
+
+    {% for m in movements %}
+    <tr>
+        <td>{{ m.date }}</td>
+        <td>{{ m.movement_type }}</td>
+        <td>{{ m.quantity }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="3">No movements yet</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'add_stock_movement' product.id %}">
+    ➕ Add stock movement
+</a>
+<a href="{% url 'product_list' %}">⬅ Back to products</a>
+{% endblock %}

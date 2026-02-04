@@ -1,0 +1,107 @@
+body {
+    background-color: #eee;
+    font-family: "Inter", sans-serif;
+    color: #0d121b;
+}
+
+/* Cards */
+.card {
+    border-radius: 0.75rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.card .card-body h5 {
+    font-weight: 600;
+    color: #333;
+}
+
+.card .card-body h3 {
+    font-weight: 700;
+    font-size: 1.75rem;
+}
+
+
+.low-stock {
+    border-left: 4px solid #d9534f;
+}
+/* Quick Actions */
+.quick-btn {
+    min-width: 180px;      
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-btn:hover {
+    transform: translateY(-3px);   /* subtle lift effect */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.quick-actions {
+    justify-content: start; /* left align */
+}
+
+/* Alerts */
+.alert-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.alert-card .icon-circle {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+}
+
+.alert-card.low-stock {
+    border-left: 4px solid #d9534f;
+}
+
+.alert-card p, .alert-card span {
+    line-height: 1.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .row-cols-1 {
+        row-gap: 1rem;
+    }
+}
+
+.card .form-check-label {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.card .form-check-input:checked + .form-check-label {
+    text-decoration: line-through underline;
+    color: #6c757d;
+}
+
+.todo-list-item:hover {
+    background-color: #f1f1f1;
+    transition: background 0.2s;
+}
+
+.quick-actions .quick-btn {
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.quick-actions .quick-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+/* .card-header {
+    padding: 15px 0;
+} */

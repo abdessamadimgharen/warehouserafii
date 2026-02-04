@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Demands List{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="background-color: #eee; padding: 20px; border-radius: 10px;">
+
+             <h2 class="fw-semibold">Demands</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'demand_add' %}" class="btn btn-dark rounded-3">
+            ➕ Create New Demand
+        </a>
+         <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-3">
+            ⬅ Back to Dashboard
+        </a>
+    </div>
+
+    <div class="card shadow-sm rounded-3 p-3 mb-4">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="product" class="form-label">Product Name</label>
+                <input type="text" name="product" id="product" class="form-control"
+                       placeholder="Search product" value="{{ product_query }}">
+            </div>
+            <div class="col-md-4">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" name="date" id="date" class="form-control" value="{{ date_query }}">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-dark w-50 rounded-3">Search</button>
+                <a href="{% url 'demand_list' %}" class="btn btn-outline-secondary w-50 rounded-3">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Demander</th>
+                    <th>Date</th>
+                    <th>Comment</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for demand in demands %}
+
+                    {% if demand.items.count > 0 %}
+                        {% for item in demand.items.all %}
+                        <tr>
+                            {% if forloop.first %}
+                                <td rowspan="{{ demand.items.count }}">{{ demand.id }}</td>
+                                <td rowspan="{{ demand.items.count }}">{{ demand.demander_name }}</td>
+                                <td rowspan="{{ demand.items.count }}">{{ demand.date|date:"Y-m-d" }}</td>
+                                <td rowspan="{{ demand.items.count }}">{{ demand.comment|default:"—" }}</td>
+                            {% endif %}
+
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+
+                            {% if forloop.first %}
+                            <td rowspan="{{ demand.items.count }}">
+                                <a href="{% url 'demand_delete' demand.id %}"
+                                   class="btn btn-sm btn-danger rounded-3 mb-1 w-100"
+                                   >
+                                    Delete
+                                </a>
+                                <a href="{{ MEDIA_URL }}factures/demand_{{ demand.id }}.html"
+                                   target="_blank"
+                                   class="btn btn-sm btn-outline-dark rounded-3 w-100">
+                                    View Facture
+                                </a>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+
+                    {% else %}
+                        <tr>
+                            <td>{{ demand.id }}</td>
+                            <td>{{ demand.demander_name }}</td>
+                            <td>{{ demand.date|date:"Y-m-d" }}</td>
+                            <td>{{ demand.comment|default:"—" }}</td>
+                            <td colspan="2" class="text-muted text-center">No products</td>
+                            <td>
+                                <a href="{% url 'demand_delete' demand.id %}"
+                                   class="btn btn-sm btn-danger w-100 rounded-3">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        No demands found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

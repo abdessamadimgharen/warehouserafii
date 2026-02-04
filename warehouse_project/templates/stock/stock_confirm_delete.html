@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Delete Movement{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 600px; background-color: #eee; padding: 25px; border-radius: 12px;">
+
+    <h2 class="fw-semibold text-center mb-4">Delete Stock Movement</h2>
+    
+    <div class="card shadow-sm rounded-3 p-4 text-center" style="background-color: #fff;">
+        <p class="fs-5">Are you sure you want to delete this movement?</p>
+
+        <ul class="list-unstyled text-start mt-3" style="line-height: 1.6;">
+            <li><strong>Product:</strong> {{ movement.product.name }}</li>
+            <li><strong>Type:</strong> {{ movement.get_movement_type_display }}</li>
+            <li><strong>Quantity:</strong> {{ movement.quantity }}</li>
+            <li><strong>Date:</strong> {{ movement.date }}</li>
+        </ul>
+        
+        <form method="post" class="d-flex justify-content-center gap-3 mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger rounded-3 px-4">Yes, Delete</button>
+            <a href="{% url 'stock_list' %}" class="btn btn-outline-secondary rounded-3 px-4">Cancel</a>
+        </form>
+    </div>
+
+</div>
+
+<style>
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #ddd;
+    color: #333;
+}
+</style>
+{% endblock %}

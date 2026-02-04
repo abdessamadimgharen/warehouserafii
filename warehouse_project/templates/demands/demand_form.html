@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Create Multi-Product Demand{% endblock %}
+
+{% block content %}
+<div class="container mt-4" style="background-color: #eee; padding: 20px; border-radius: 10px;">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-semibold">Create Multi-Product Demand</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary rounded-3">
+            ⬅ Back to Dashboard
+        </a>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="email_to" class="form-label">Email to send demand</label>
+                <input type="email" name="email_to" id="email_to"
+                       class="form-control" placeholder="Enter recipient email" required>
+            </div>
+            <div class="col-md-6">
+                <label for="id_demander_name" class="form-label">Demander Name</label>
+                <input type="text" name="demander_name" id="id_demander_name"
+                       class="form-control" placeholder="Your name" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_comment" class="form-label">Comment</label>
+            <textarea name="comment" id="id_comment" class="form-control"
+                      rows="3" placeholder="Optional comment"></textarea>
+        </div>
+
+        <h4>Products</h4>
+        <div class="table-responsive mb-3">
+            <table class="table table-striped table-bordered" id="product-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="product-row">
+                        <td>
+                            <input list="products-list" name="items-0-product" class="form-control" required>
+                        </td>
+                        <td>
+                            <input type="number" name="items-0-quantity" class="form-control" min="1" required>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <datalist id="products-list">
+            {% for p in products %}
+                <option value="{{ p.name }}">
+            {% endfor %}
+        </datalist>
+
+        <input type="hidden" name="items-TOTAL_FORMS" id="id_items-TOTAL_FORMS" value="1">
+
+        <div class="d-flex gap-2">
+            <button type="button" id="add-row" class="btn btn-outline-dark rounded-3">
+                ➕ Add Another Product
+            </button>
+            <button type="submit" class="btn btn-dark rounded-3">
+                Send Demand
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+const addBtn = document.getElementById('add-row');
+const table = document.getElementById('product-table');
+const totalForms = document.getElementById('id_items-TOTAL_FORMS');
+
+function reindexRows() {
+    const rows = table.querySelectorAll('.product-row');
+    rows.forEach((r, index) => {
+        r.querySelector('input[name$="-product"]').name = `items-${index}-product`;
+        r.querySelector('input[name$="-quantity"]').name = `items-${index}-quantity`;
+    });
+    totalForms.value = rows.length;
+}
+
+function addRemoveListener(button) {
+    button.addEventListener('click', () => {
+        button.closest('.product-row').remove();
+        reindexRows();
+    });
+}
+
+addBtn.addEventListener('click', () => {
+    const newRow = table.querySelector('.product-row').cloneNode(true);
+    newRow.querySelector('input[name$="-product"]').value = '';
+    newRow.querySelector('input[name$="-quantity"]').value = '';
+    const removeCell = newRow.querySelector('td:last-child');
+    removeCell.innerHTML = '<button type="button" class="remove-row">❌</button>';
+    addRemoveListener(removeCell.querySelector('.remove-row'));
+    table.querySelector('tbody').appendChild(newRow);
+    reindexRows();
+});
+
+document.querySelectorAll('.remove-row').forEach(btn => addRemoveListener(btn));
+</script>
+
+{% endblock %}

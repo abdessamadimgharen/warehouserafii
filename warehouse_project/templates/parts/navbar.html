@@ -1,0 +1,54 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/nav.css' %}">
+
+{% if request.user.is_authenticated %}
+<div class="fixme">
+<nav class="navbar navbar-light border-bottom px-3 position-relative">
+
+    <button id="menuToggle" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+   
+      <a href="{% url 'dashboard' %}" class="text-dark ms-auto text-muted fw-semibold text-decoration-none">Welcome, {{ request.user.username }}</a>  
+
+    <div id="menuLinks" class="collapse-menu shadow rounded bg-white p-2">
+        <a href="{% url 'dashboard' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-gauge me-2"></i> Dashboard
+        </a>
+        <a href="{% url 'stock_list' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-warehouse me-2"></i> Stock Movements
+        </a>
+        <a href="{% url 'product_list' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-box me-2"></i> Products
+        </a>
+        <a href="{% url 'demand_add' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-cart-plus me-2"></i> Create Demand
+        </a>
+        <a href="{% url 'demand_list' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-list me-2"></i> View Demands
+        </a>
+        <a href="{% url 'send_report' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-paper-plane me-2"></i> Send Report
+        </a>
+        <a href="{% url 'report_list' %}" class="d-flex align-items-center menu-link">
+            <i class="fa-solid fa-file-lines me-2"></i> Reports List
+        </a>
+        <a href="{% url 'logout' %}" class="d-flex align-items-center menu-link text-danger">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+        </a>
+    </div>
+
+</nav>
+</div>
+{% endif %}
+
+
+<script>
+
+    document.getElementById("menuToggle").onclick = function () {
+        document.getElementById("menuLinks").classList.toggle("show");
+    };
+
+
+</script>
