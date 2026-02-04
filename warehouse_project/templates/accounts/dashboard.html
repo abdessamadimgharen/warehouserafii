@@ -211,8 +211,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = li.dataset.id;
 
         if (btn.classList.contains('edit-btn')) {
-            const newTask = prompt('Edit task:', li.querySelector('label').textContent);
-            if (!newTask) return;
+            if (btn.classList.contains('edit-btn')) {
+                    const oldTask = li.querySelector('label').textContent;
+
+                    Swal.fire({
+                        title: 'Edit task',
+                        input: 'text',
+                        inputValue: oldTask,
+                        showCancelButton: true,
+                        confirmButtonText: 'Save',
+                        cancelButtonText: 'Cancel',
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Task cannot be empty';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`{% url 'edit_todo' 0 %}`.replace('0', id), {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': '{{ csrf_token }}',
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: new URLSearchParams({ 'task': result.value })
+                            }).then(() => {
+                                li.querySelector('label').textContent = result.value;
+                            });
+                        }
+                    });
+                }
+
             fetch(`{% url 'edit_todo' 0 %}`.replace('0', id), {
                 method: 'POST',
                 headers: {'X-CSRFToken': '{{ csrf_token }}', 'Content-Type': 'application/x-www-form-urlencoded'},
@@ -220,41 +249,71 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(() => li.querySelector('label').textContent = newTask);
         }
 
-     
         if (btn.classList.contains('delete-btn')) {
-            fetch(`{% url 'delete_todo' 0 %}`.replace('0', id), {
-                method: 'POST',
-                headers: {'X-CSRFToken': '{{ csrf_token }}'}
-            }).then(() => {
-                li.remove();
+            Swal.fire({
+                title: 'Delete task?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Delete'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`{% url 'delete_todo' 0 %}`.replace('0', id), {
+                        method: 'POST',
+                        headers: {'X-CSRFToken': '{{ csrf_token }}'}
+                    }).then(() => {
+                        li.remove();
 
-                if (list.children.length === 0) {
-                    const noTasks = document.createElement('li');
-                    noTasks.id = 'no-tasks';
-                    noTasks.className = 'list-group-item text-muted';
-                    noTasks.textContent = 'No tasks yet!';
-                    list.appendChild(noTasks);
+                        if (list.children.length === 0) {
+                            const noTasks = document.createElement('li');
+                            noTasks.id = 'no-tasks';
+                            noTasks.className = 'list-group-item text-muted';
+                            noTasks.textContent = 'No tasks yet!';
+                            list.appendChild(noTasks);
+                        }
+                    });
                 }
             });
         }
 
+
     });
 
     // Delete All
-    deleteAllBtn.addEventListener('click', () => {
-        if (!confirm('Delete all tasks?')) return;
-        fetch("{% url 'delete_all_todos' %}", {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}})
-        .then(() => {
-            list.innerHTML = ''; 
+        deleteAllBtn.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'All tasks will be deleted!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete all',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("{% url 'delete_all_todos' %}", {
+                        method: 'POST',
+                        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+                    }).then(() => {
+                        list.innerHTML = '';
 
-            
-            const noTasks = document.createElement('li');
-            noTasks.id = 'no-tasks';
-            noTasks.className = 'list-group-item text-muted';
-            noTasks.textContent = 'No tasks yet!';
-            list.appendChild(noTasks);
+                        const noTasks = document.createElement('li');
+                        noTasks.id = 'no-tasks';
+                        noTasks.className = 'list-group-item text-muted';
+                        noTasks.textContent = 'No tasks yet!';
+                        list.appendChild(noTasks);
+
+                        Swal.fire(
+                            'Deleted!',
+                            'All tasks have been removed.',
+                            'success'
+                        );
+                    });
+                }
+            });
         });
-    });
+
 });
 </script>
 {% endblock %}
