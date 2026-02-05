@@ -49,7 +49,6 @@ def send_report(request):
                         </a>
                     </p>
                     """
-
             facture_html = f"""
             <!DOCTYPE html>
             <html>
